@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.29797979797979796" layoutX="2.0" layoutY="72.0" prefHeight="531.0" prefWidth="800.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        </items>
+      </SplitPane>
+      <Label layoutX="38.0" layoutY="16.0" prefHeight="43.0" prefWidth="154.0" text="Rebate Manager" />
+      <Button layoutX="466.0" layoutY="20.0" mnemonicParsing="false" text="Add New" />
+      <Button layoutX="572.0" layoutY="20.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="85.0" text="Save" />
+      <Button layoutX="666.0" layoutY="20.0" mnemonicParsing="false" text="Delete" />
+   </children>
+</AnchorPane>
