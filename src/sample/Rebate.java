@@ -1,5 +1,8 @@
 package sample;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.time.LocalDate;
 
 /**
@@ -133,9 +136,11 @@ public class Rebate {
         this.dateReceived = dateReceived;
     }
 
-    public boolean saveRebate() {
-
-
+    public boolean saveRebate() throws FileNotFoundException {
+        PrintWriter out = new PrintWriter("rebate_store.txt");
+        String rebateString = this.firstName+" "+this.middleInitial+" "+this.lastName+" "+this.addressLine1+" "+this.addressLine2+" "+this.city+" "+this.state+" "+this.zipCode+" "+this.phoneNumber+" "+this.emailAddress+this.isProofOfPurchaseAttached+" "+this.dateReceived;
+        out.println(rebateString);
+        out.close();
         return true;
     }
 }
