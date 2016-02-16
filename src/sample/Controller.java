@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -71,7 +72,11 @@ public class Controller implements Initializable {
         if (!editingExistingRebate) {
             Rebate newRebate = new Rebate(firstName.getText(), lastName.getText(), middleInitial.getText(), emailAddress.getText(), phoneNumber.getText(), addressLine1.getText(), addressLine2.getText(), state.getText(), city.getText(), zipCode.getText(),true, dateReceived.getValue());
             // TODO: validate all feilds
-            System.out.println("done");
+            try {
+                newRebate.saveRebate();
+            } catch (FileNotFoundException e) {
+                System.out.println("Couldnt save the rebate at this time");
+            }
         }
     }
 
