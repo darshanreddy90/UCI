@@ -1,9 +1,11 @@
 package sample;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Iterator;
 
 /**
  * Created by dxr141430 on 2/15/2016.
@@ -25,7 +27,7 @@ public class Rebate {
     public Rebate() {
     }
 
-    public Rebate(String firstName, String lastName, String middleInitial, String emailAddress, String phoneNumber, String addressLine1, String addressLine2, String state, String city, String zipCode, boolean isProofOfPurchaseAttached, LocalDate dateReceived) {
+    public Rebate(String firstName, String lastName, String middleInitial, String addressLine1, String addressLine2, String state, String city, String zipCode, String phoneNumber, String emailAddress, boolean isProofOfPurchaseAttached, LocalDate dateReceived) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleInitial = middleInitial;
@@ -136,11 +138,38 @@ public class Rebate {
         this.dateReceived = dateReceived;
     }
 
-    public boolean saveRebate() throws FileNotFoundException {
+    public static boolean saveRebates(List<Rebate> rebates) throws FileNotFoundException {
         PrintWriter out = new PrintWriter("rebate_store.txt");
-        String rebateString = this.firstName+" "+this.middleInitial+" "+this.lastName+" "+this.addressLine1+" "+this.addressLine2+" "+this.city+" "+this.state+" "+this.zipCode+" "+this.phoneNumber+" "+this.emailAddress+this.isProofOfPurchaseAttached+" "+this.dateReceived;
-        out.println(rebateString);
+        Iterator<Rebate> it = rebates.iterator();
+        while (it.hasNext()) {
+            Rebate rebate = it.next();
+            String rebateString = convertToStorableFormat(rebate);
+            out.println(rebateString);
+        }
         out.close();
         return true;
+    }
+
+    public static List<Rebate> loadAllRebates() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new File("rebate_store.txt"));
+        List<Rebate> rebates = new ArrayList<>();
+        while (scanner.hasNext()){
+            String row = scanner.nextLine();
+            rebates.add(Rebate.convertToObjectFromString(row));
+        }
+        return rebates;
+    }
+
+    public static String convertToStorableFormat(Rebate rebate) {
+        return rebate.firstName+" "+rebate.middleInitial+" "+rebate.lastName+" "+rebate.addressLine1+" "+rebate.addressLine2+" "+rebate.city+" "+rebate.state+" "+rebate.zipCode+" "+rebate.phoneNumber+" "+rebate.emailAddress+" "+rebate.isProofOfPurchaseAttached+" "+rebate.dateReceived;
+    }
+
+    public static Rebate convertToObjectFromString(String recordString) {
+        Scanner scanner = new Scanner(recordString);
+        Rebate rebate = new Rebate(scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(), scanner.next(),scanner.next(),scanner.nextBoolean(),null);
+
+        String[] date = scanner.next().split("-");
+        rebate.setDateReceived(LocalDate.of(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2])));
+        return rebate;
     }
 }
