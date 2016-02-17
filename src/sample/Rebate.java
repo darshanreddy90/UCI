@@ -27,7 +27,7 @@ public class Rebate {
     public Rebate() {
     }
 
-    public Rebate(String firstName, String lastName, String middleInitial, String addressLine1, String addressLine2, String state, String city, String zipCode, String phoneNumber, String emailAddress, boolean isProofOfPurchaseAttached, LocalDate dateReceived) {
+    public Rebate(String firstName, String middleInitial, String lastName, String addressLine1, String addressLine2, String city, String state, String zipCode, String phoneNumber, String emailAddress, boolean isProofOfPurchaseAttached, LocalDate dateReceived) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleInitial = middleInitial;
@@ -153,7 +153,7 @@ public class Rebate {
     public static List<Rebate> loadAllRebates() throws FileNotFoundException {
         Scanner scanner = new Scanner(new File("rebate_store.txt"));
         List<Rebate> rebates = new ArrayList<>();
-        while (scanner.hasNext()){
+        while (scanner.hasNextLine()){
             String row = scanner.nextLine();
             rebates.add(Rebate.convertToObjectFromString(row));
         }
@@ -161,13 +161,35 @@ public class Rebate {
     }
 
     public static String convertToStorableFormat(Rebate rebate) {
-        return rebate.firstName+" "+rebate.middleInitial+" "+rebate.lastName+" "+rebate.addressLine1+" "+rebate.addressLine2+" "+rebate.city+" "+rebate.state+" "+rebate.zipCode+" "+rebate.phoneNumber+" "+rebate.emailAddress+" "+rebate.isProofOfPurchaseAttached+" "+rebate.dateReceived;
+        if (rebate.middleInitial == null || rebate.middleInitial.length() == 0) {
+            rebate.middleInitial = "-";
+        }
+        if (rebate.addressLine2 == null || rebate.addressLine2.length() == 0) {
+            rebate.addressLine2 = "-";
+        }
+        String output =  rebate.firstName+"\t"+rebate.middleInitial+"\t"+rebate.lastName+"\t"+rebate.addressLine1+"\t"+rebate.addressLine2+"\t"+rebate.city+"\t"+rebate.state+"\t"+rebate.zipCode+"\t"+rebate.phoneNumber+"\t"+rebate.emailAddress+"\t"+rebate.isProofOfPurchaseAttached+"\t"+rebate.dateReceived;
+        if (rebate.middleInitial.equalsIgnoreCase("-")) {
+            rebate.middleInitial = "";
+        }
+        if (rebate.addressLine2.equalsIgnoreCase("-")) {
+            rebate.addressLine2 = "";
+        }
+        return  output;
     }
 
     public static Rebate convertToObjectFromString(String recordString) {
-        Scanner scanner = new Scanner(recordString);
-        Rebate rebate = new Rebate(scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(), scanner.next(),scanner.next(),scanner.nextBoolean(),null);
 
+        if(recordString == null || recordString.length() == 0) {
+            return null;
+        }
+        Scanner scanner = new Scanner(recordString).useDelimiter("\t");
+        Rebate rebate = new Rebate(scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(),scanner.next(), scanner.next(),scanner.next(),scanner.nextBoolean(),null);
+        if (rebate.middleInitial.equalsIgnoreCase("-")) {
+            rebate.middleInitial = "";
+        }
+        if (rebate.addressLine2.equalsIgnoreCase("-")) {
+            rebate.addressLine2 = "";
+        }
         String[] date = scanner.next().split("-");
         rebate.setDateReceived(LocalDate.of(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2])));
         return rebate;
